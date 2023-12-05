@@ -1,0 +1,36 @@
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_timeout: 5s # is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'Twilight Mobile'
+
+rule_files:
+  - demo-alerts.yml
+
+ alert
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "docker.for.mac.localhost:9093"
+
+scrape_configs:
+
+  - job_name: "gateway-metrics"
+    metrics_path: /api/metrics
+    static_configs:
+      - targets: ["docker.for.mac.localhost:4005"]
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["docker.for.mac.localhost:9090"]
+
+  - job_name: "pushgateway"
+    honor_labels: true
+    static_configs:
+      - targets: ["docker.for.mac.localhost:9091"]

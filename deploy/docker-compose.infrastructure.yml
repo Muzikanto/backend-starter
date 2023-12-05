@@ -1,0 +1,167 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: shelter_postgres
+    hostname: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.infrastructure
+    volumes:
+      - ./databases/postgres:/var/lib/postgresql/data
+      - ./postgres/db.default.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: shelter_rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - .env.infrastructure
+    volumes:
+      - ./databases/rabbitmq:/var/lib/rabbitmq
+      - ./databases/rabbitmq:/var/log/rabbitmq
+
+  redis:
+    image: redis:6.2-alpine
+    command: sh -c "redis-server --save 20 1 --loglevel warning --requirepass $$REDIS_PASSWORD"
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    env_file:
+      - .env.infrastructure
+    volumes:
+      - ./databases/redis:/data
+
+  pgadmin:
+    user: root
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8888:80"
+    env_file:
+      - ./.env.infrastructure
+    depends_on:
+      - postgres
+    volumes:
+      - ./databases/pgadmin-data:/var/lib/pgadmin
+
+  prometheus:
+    image: prom/prometheus:v2.36.2
+    container_name: prometheus
+    hostname: prometheus
+    volumes:
+      - ./prometheus/local/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./databases/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--web.enable-remote-write-receiver'
+      - '--web.page-title=DaprInventoryTimeseries'
+      - '--log.level=debug'
+    ports:
+      - '9090:9090'
+    networks:
+      - http
+
+  pushgateway:
+    image: prom/pushgateway:v1.4.3
+    container_name: pushgateway
+    hostname: pushgateway
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - "9091:9091"
+    networks:
+      - http
+
+  # https://github.com/vegasbrianc/prometheus/blob/master/docker-compose.yml
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    hostname: grafana
+    env_file:
+      - ./.env.infrastructure
+    volumes:
+      - ./databases/grafana:/var/lib/grafana
+    ports:
+      - "9100:3000"
+    links:
+      - elasticsearch
+    networks:
+      - http
+      - elk
+
+  elasticsearch:
+    image: elasticsearch:8.7.1
+    container_name: elasticsearch
+    hostname: elasticsearch
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - cluster.name=docker-cluster
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - discovery.type=single-node
+      # - ES_JAVA_OPTS=-XX:UseAVX=2 -Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./databases/elasticsearch:/usr/share/elasticsearch/data
+    mem_limit: "1g"
+    ports:
+      - "9200:9200"
+    networks:
+      - http
+      - elk
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+
+  alertmanager:
+    container_name: alertmanager
+    image: prom/alertmanager:v0.26.0
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - "./alertmanager:/config"
+      - "./databases/alertmanager:/data"
+    command: --config.file=/config/config.yml --log.level=debug
+
+volumes:
+  postgres:
+  rabbitmq:
+  redis:
+  ipfs:
+  elasticsearch:
+  prometheus:
+  grafana:
+
+networks:
+  db:
+    driver: bridge
+  redis:
+    driver: bridge
+  amqp:
+    driver: bridge
+  http:
+    driver: bridge
+  ipfs:
+    driver: bridge
+  elk:
+    driver: bridge
