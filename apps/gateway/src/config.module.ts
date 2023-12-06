@@ -13,6 +13,7 @@ import { PrometheusConfig } from '@packages/metrics';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { RedisConfig } from '@packages/redis';
+import { KeycloakConfig } from '@packages/keycloak';
 
 const providers: Provider[] = [
   // internal
@@ -28,6 +29,7 @@ const providers: Provider[] = [
   TelegramConfig,
   TelegramChatConfig,
   SentryConfig,
+  KeycloakConfig,
   // app
 ];
 

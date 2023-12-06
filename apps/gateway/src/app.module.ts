@@ -18,6 +18,8 @@ import { TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { PrometheusConfig } from '@packages/metrics';
 import { ExampleModule } from '@core/example/application-module';
+import { KeycloakConfig } from '@packages/keycloak';
+import { KeycloakConnectModule } from 'nest-keycloak-connect';
 
 @Module({
   imports: [
@@ -52,6 +54,10 @@ import { ExampleModule } from '@core/example/application-module';
     HealthModule.forRootAsync({
       useExisting: HealthConfig,
       imports: [ConfigModule],
+    }),
+    KeycloakConnectModule.registerAsync({
+      imports: [ConfigModule],
+      useExisting: KeycloakConfig,
     }),
     // App
     ExampleModule,
