@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  worker:
+    image: registry.gitlab.com/muzikanto/backend-starter:latest
+    container_name: worker
+    hostname: worker
+    restart: always
+    command: [ 'npm', 'run', 'start:prod:worker']
+    ports:
+      - '4001:4001'
+    networks:
+      - http
+
+networks:
+  http:
+    driver: bridge

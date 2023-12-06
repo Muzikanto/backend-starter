@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.36.2
+    container_name: prometheus
+    hostname: prometheus
+    volumes:
+      - ./prometheus/local/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--web.enable-remote-write-receiver'
+      - '--web.page-title=DaprInventoryTimeseries'
+      - '--log.level=debug'
+    ports:
+      - '9090:9090'
+    networks:
+      - http
+
+  pushgateway:
+    image: prom/pushgateway:v1.4.3
+    container_name: pushgateway
+    hostname: pushgateway
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - "9091:9091"
+    networks:
+      - http
+
+  # https://github.com/vegasbrianc/prometheus/blob/master/docker-compose.yml
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    hostname: grafana
+    env_file:
+      - .env.infrastructure
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+      - "9100:3000"
+    links:
+      - elasticsearch
+    networks:
+      - http
+
+  alertmanager:
+    container_name: alertmanager
+    image: prom/alertmanager:v0.26.0
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager/local:/config
+      - alertmanager:/data
+    command: --config.file=/config/config.yml --log.level=debug
+
+volumes:
+  alertmanager:
+  prometheus:
+  grafana:
+
+networks:
+  http:
+    driver: bridge

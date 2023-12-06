@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  gateway:
+    image: registry.gitlab.com/muzikanto/backend-starter:latest
+    container_name: gateway
+    hostname: gateway
+    restart: always
+    command: [ 'npm', 'run', 'start:prod:gateway']
+    ports:
+      - '4005:4005'
+    networks:
+      - http
+
+  migration:
+    image: registry.gitlab.com/muzikanto/backend-starter:latest
+    container_name: migration
+    hostname: migration
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - postgres
+    command: [ 'node', './dist/apps/gateway/src/migration' ]
+
+networks:
+  http:
+    driver: bridge

@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  minio:
+    container_name: minio
+    image: minio/minio
+    restart: always
+    env_file: .env.infrastructure
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /data/loki-data && \
+        mkdir -p /data/loki-ruler && \
+        minio server /data --console-address :9001
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 15s
+      timeout: 20s
+      retries: 5
+    networks:
+      - http
+      - minio
+
+volumes:
+  minio-data:
+
+networks:
+  http:
+    driver: bridge
+  minio:
+    driver: bridge

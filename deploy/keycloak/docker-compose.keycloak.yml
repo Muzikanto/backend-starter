@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  keycloak-postgres:
+    container_name: keycloak-postgres
+    image: postgres:11.2-alpine
+    ports:
+      - "5433:5432"
+    volumes:
+      - keycloak-data:/var/lib/postgresql/data/
+#      - ./db-keycloak.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env.infrastructure
+    restart: always
+    networks:
+      - keycloak
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:20.0.3
+    restart: always
+    ports:
+      - "8090:8080"
+    env_file:
+      - .env.infrastructure
+    command: start-dev
+    depends_on:
+      - keycloak-postgres
+    networks:
+      - http
+      - keycloak
+
+volumes:
+  keycloak-data:
+
+networks:
+  http:
+    driver: bridge
+  keycloak:
+    driver: bridge
