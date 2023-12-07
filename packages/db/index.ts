@@ -1,2 +1,2 @@
 export * from './config/typeorm.config';
-export * from './repository.base';
+export * from './module/repository.base';

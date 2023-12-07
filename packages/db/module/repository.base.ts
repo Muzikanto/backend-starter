@@ -1,4 +1,4 @@
-import { DomainBase, IMapper } from '../nest/ddd';
+import { DomainBase, IMapper } from '../../nest/ddd';
 import { DataSource, EntityManager, EntityTarget, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 import { EventPublisher } from '@nestjs/cqrs';
 import { NotFoundException } from '@nestjs/common';

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { runMigration } from '@packages/db/utils';
+import { runMigration } from '@packages/db/module/utils';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const envPath = path.resolve(`./apps/gateway/.env${isProduction ? '' : '.local'}`);

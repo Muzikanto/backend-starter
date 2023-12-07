@@ -1,26 +1,27 @@
 import { Provider } from '@nestjs/common';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { ITestingApplication, ITestingApplicationUtils } from './types';
-import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule } from '@nestjs/microservices';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ScheduleModule } from '@nestjs/schedule';
-import { getTestingDataSource } from '@packages/testing/db/init-db';
 import { MockConfigModule } from '@packages/testing/config';
-import { WorkerClientRmqProvider } from '@packages/client-api/worker-client.rmq.inject';
-import { getRedisToken, RedisModule } from '@liaoliaots/nestjs-redis';
-import { MockRedis, MockRedisConfig } from '@packages/redis/testing';
+import { WorkerClientRmqProvider } from '@packages/client-api';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { withMockRedis } from '@packages/redis/testing';
 import { WinstonModule } from 'nest-winston';
 import { WinstonConfig } from '@packages/logger/winston.config';
-import { SENTRY_TOKEN, SentryModule } from '@ntegral/nestjs-sentry';
-import { getBotToken, TelegrafModule } from 'nestjs-telegraf';
-import { getMockTelegrafBot } from '@packages/telegram/testing/getMockTelegrafBot';
+import { SentryModule } from '@ntegral/nestjs-sentry';
+import { TelegrafModule } from 'nestjs-telegraf';
 import { SentryConfig } from '@packages/sentry';
 import { RedisConfig } from '@packages/redis';
-import { getMockSentry } from '@packages/sentry/testing';
+import { withMockSentry } from '@packages/sentry/testing';
+import { withMockDb } from '@packages/db/testing/withMockDb';
+import { withMockTelegram } from '@packages/telegram/testing';
+import { getTestingDataSource } from '@packages/db/testing';
 
 export const getTestingApplication = async (metadata: ModuleMetadata): Promise<ITestingApplication> => {
   const fastifyAdapter = new FastifyAdapter();
@@ -33,7 +34,7 @@ export const getTestingApplication = async (metadata: ModuleMetadata): Promise<I
     ...(metadata.providers || []),
   ];
 
-  const moduleFixture: TestingModule = await Test.createTestingModule({
+  let testingModule = Test.createTestingModule({
     ...metadata,
     imports: [
       MockConfigModule,
@@ -65,23 +66,13 @@ export const getTestingApplication = async (metadata: ModuleMetadata): Promise<I
     ],
     providers,
     exports: providers,
-  })
-    // override datasource
-    .overrideProvider(getDataSourceToken('default'))
-    .useValue(dataSource)
-    // override telegram
-    .overrideProvider(getBotToken())
-    .useValue(getMockTelegrafBot())
-    // redis
-    .overrideProvider(getRedisToken('default'))
-    .useClass(MockRedis)
-    .overrideProvider(RedisConfig)
-    .useClass(MockRedisConfig)
-    // logger
-    .overrideProvider(SENTRY_TOKEN)
-    .useValue(getMockSentry())
-    //
-    .compile();
+  });
+  testingModule = withMockRedis(testingModule);
+  testingModule = withMockSentry(testingModule);
+  testingModule = withMockTelegram(testingModule);
+  testingModule = withMockDb(testingModule, dataSource);
+
+  const moduleFixture = await testingModule.compile();
 
   const app = moduleFixture.createNestApplication<NestFastifyApplication>(fastifyAdapter, { logger: ['error'] });
   app.useLogger(['error']);
