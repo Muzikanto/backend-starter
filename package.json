@@ -25,7 +25,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test": "jest --logHeapUsage --workerMemoryThreshold=1G --workerMemoryThreshold=80% --maxWorkers=30% --passWithNoTests",
     "test:coverage": "jest --coverage --logHeapUsage --workerMemoryThreshold=1G --workerMemoryThreshold=80% --maxWorkers=30%",
-    "test:e2e": "jest --logHeapUsage --workerMemoryThreshold=1G --workerMemoryThreshold=80% --maxWorkers=30% --config ./jest-e2e.config.json --passWithNoTests",
+    "test:e2e": "jest --logHeapUsage --workerMemoryThreshold=1G --workerMemoryThreshold=80% --maxWorkers=30% --config ./jest-e2e.config.json",
     "test:e2e:watch": "jest --watch --config ./jest-e2e.config.json",
     "migration": "ts-node -r tsconfig-paths/register apps/gateway/src/migration.ts",
     "migration:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register apps/gateway/src/migration.ts",
