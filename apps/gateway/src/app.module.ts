@@ -20,20 +20,21 @@ import { PrometheusConfig } from '@packages/metrics';
 import { ExampleModule } from '@core/example/application-module';
 import { KeycloakConfig } from '@packages/keycloak';
 import { KeycloakConnectModule } from 'nest-keycloak-connect';
+import { RedisConfig } from '@packages/redis';
 
 @Module({
   imports: [
     ConfigModule,
     ThrottlerModule.forRoot(),
     ScheduleModule.forRoot(),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useExisting: TypeormConfig,
-    // }),
-    // RedisModule.forRootAsync({
-    //   useExisting: RedisConfig,
-    //   imports: [ConfigModule],
-    // }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useExisting: TypeormConfig,
+    }),
+    RedisModule.forRootAsync({
+      useExisting: RedisConfig,
+      imports: [ConfigModule],
+    }),
     LoggerModule,
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
