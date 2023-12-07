@@ -4,6 +4,20 @@ BRANCH		    ?= production
 REGISTRY	    := registry.gitlab.com/muzikanto/test
 INFRASTRUCTURE_NAME=backend
 
+# initialize
+
+init:
+	cp ./apps/gateway/.env.sample ./apps/gateway/.env && \
+	cp ./apps/worker/.env.sample ./apps/worker/.env \
+	cp ./apps/elastic/.env.infrastructure.sample ./apps/elastic/.env.infrastructure && \
+	cp ./apps/keycloak/.env.infrastructure.sample ./apps/keycloak/.env.infrastructure && \
+	cp ./apps/loki/.env.infrastructure.sample ./apps/loki/.env.infrastructure && \
+	cp ./apps/metrics/.env.infrastructure.sample ./apps/metrics/.env.infrastructure && \
+	cp ./apps/minio/.env.infrastructure.sample ./apps/minio/.env.infrastructure && \
+	cp ./apps/postgres/.env.infrastructure.sample ./apps/postgres/.env.infrastructure && \
+	cp ./apps/rabbitmq/.env.infrastructure.sample ./apps/rabbitmq/.env.infrastructure && \
+	cp ./apps/redis/.env.infrastructure.sample ./apps/redis/.env.infrastructure
+
 # scripts
 watch:
 	npm run start:dev
