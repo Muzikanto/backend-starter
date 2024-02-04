@@ -9,7 +9,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MockConfigModule } from '@packages/testing/config';
-import { WorkerClientRmqProvider } from '@packages/client-api';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { withMockRedis } from '@packages/redis/testing';
 import { WinstonModule } from 'nest-winston';
@@ -22,6 +21,7 @@ import { withMockSentry } from '@packages/sentry/testing';
 import { withMockDb } from '@packages/db/testing/withMockDb';
 import { withMockTelegram } from '@packages/telegram/testing';
 import { getTestingDataSource } from '@packages/db/testing';
+import { createRmqProvider } from '@packages/client-api';
 
 export const getTestingApplication = async (metadata: ModuleMetadata): Promise<ITestingApplication> => {
   const fastifyAdapter = new FastifyAdapter();
@@ -61,7 +61,7 @@ export const getTestingApplication = async (metadata: ModuleMetadata): Promise<I
         useExisting: RedisConfig,
       }),
       ScheduleModule.forRoot(),
-      ClientsModule.registerAsync([WorkerClientRmqProvider]),
+      ClientsModule.registerAsync([createRmqProvider('WORKER')]),
       ...(metadata.imports || []),
     ],
     providers,

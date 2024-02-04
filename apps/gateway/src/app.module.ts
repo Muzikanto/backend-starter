@@ -9,7 +9,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfig } from '@packages/db';
 import { HealthConfig } from '@app/gateway/src/health.config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { WinstonModule } from 'nest-winston';
 import { WinstonConfig, LoggerModule } from '@packages/logger';
 import { SentryModule } from '@ntegral/nestjs-sentry';
@@ -17,10 +16,9 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { PrometheusConfig } from '@packages/metrics';
-import { ExampleModule } from '@core/example/application-module';
+import { ExampleApplicationModule } from '@core/example/application-module';
 import { KeycloakConfig } from '@packages/keycloak';
 import { KeycloakConnectModule } from 'nest-keycloak-connect';
-import { RedisConfig } from '@packages/redis';
 
 @Module({
   imports: [
@@ -30,10 +28,6 @@ import { RedisConfig } from '@packages/redis';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useExisting: TypeormConfig,
-    }),
-    RedisModule.forRootAsync({
-      useExisting: RedisConfig,
-      imports: [ConfigModule],
     }),
     LoggerModule,
     WinstonModule.forRootAsync({
@@ -61,7 +55,7 @@ import { RedisConfig } from '@packages/redis';
       useExisting: KeycloakConfig,
     }),
     // App
-    ExampleModule,
+    ExampleApplicationModule.forMonolith(),
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: ExceptionInterceptor }],
 })

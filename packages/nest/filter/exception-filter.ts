@@ -6,6 +6,7 @@ import { RpcException } from '@nestjs/microservices';
 export class ExceptionFilter implements BaseRpcExceptionFilter<RpcException> {
   protected readonly logger: ConsoleLogger = new ConsoleLogger();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   catch(exception: RpcException | Error, host: ArgumentsHost): Observable<any> {
     const err = exception instanceof RpcException ? exception.getError() : exception;
     this.logger.error(err, (err as Error).stack);

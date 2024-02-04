@@ -44,6 +44,7 @@ export function MethodLogger(
             getParsedResult(ctx.res) || 'void'
           }`;
 
+          // eslint-disable-next-line
           logger.debug!(message, ctx.target);
         }
 

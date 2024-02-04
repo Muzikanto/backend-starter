@@ -22,7 +22,7 @@
         "tsConfigPath": "tsconfig.json"
       }
     },
-    "@app": {
+    "@core": {
       "type": "library",
       "root": "/core",
       "sourceRoot": "/core",

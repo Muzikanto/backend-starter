@@ -5,6 +5,8 @@ services:
     image: registry.gitlab.com/muzikanto/backend-starter:latest
     container_name: worker
     hostname: worker
+    env_file:
+      - .eng.worker
     restart: always
     command: [ 'npm', 'run', 'start:prod:worker']
     ports:

@@ -12,6 +12,7 @@ import { ClassConstructor, plainToClass } from 'class-transformer';
 export class IsNestedElementsConstraint<T extends object> implements ValidatorConstraintInterface {
   constructor(protected typeRef: ClassConstructor<T>) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async validate(value: any, args: ValidationArguments) {
     const validations: any[] = [];
 

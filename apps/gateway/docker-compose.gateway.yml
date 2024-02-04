@@ -5,6 +5,8 @@ services:
     image: registry.gitlab.com/muzikanto/backend-starter:latest
     container_name: gateway
     hostname: gateway
+    env_file:
+      - .env.gateway
     restart: always
     command: [ 'npm', 'run', 'start:prod:gateway']
     ports:
@@ -16,6 +18,8 @@ services:
     image: registry.gitlab.com/muzikanto/backend-starter:latest
     container_name: migration
     hostname: migration
+    env_file:
+      - .env.gateway
     environment:
       NODE_ENV: production
     depends_on:

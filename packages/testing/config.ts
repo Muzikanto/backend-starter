@@ -1,20 +1,16 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { WorkerClientRmqConfig } from '@packages/client-api/worker-client.rmq.config';
 import { WinstonConfig } from '@packages/logger/winston.config';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { ConfigService } from '@packages/config';
 import { RedisConfig } from '@packages/redis';
 import { AppConfig } from '@packages/app';
+import { createRmqConfig } from '@packages/client-api';
+import { mockRmqConfig, mockTcpConfig } from '@packages/client-api/testing';
 
-process.env.RABBITMQ_HOST = 'test';
-process.env.RABBITMQ_PORT = '1';
-process.env.RABBITMQ_USER = 'test';
-process.env.RABBITMQ_PASSWORD = 'test';
-process.env.RABBITMQ_WORKER_QUEUE = 'test';
-process.env.RABBITMQ_GAME_SERVER_QUEUE = 'test';
-process.env.RABBITMQ_GATEWAY_QUEUE = 'test';
+mockRmqConfig();
+mockTcpConfig('WORKER');
 
 process.env.AUTH_SECRET = 'test';
 
@@ -22,15 +18,6 @@ process.env.LOGGER_LEVEL = 'error';
 
 process.env.TELEGRAM_CHAT_ID = 'test';
 process.env.TELEGRAM_TOKEN = 'test';
-
-process.env.TCP_GATEWAY_HOST = 'test';
-process.env.TCP_GATEWAY_PORT = '1';
-
-process.env.TCP_GAME_SERVER_COUNT = '1';
-process.env.TCP_GAME_SERVER_0_HOST = 'test';
-process.env.TCP_GAME_SERVER_0_PORT = '1';
-process.env.TCP_GAME_SERVER_1_HOST = 'test';
-process.env.TCP_GAME_SERVER_1_PORT = '1';
 
 process.env.APP_NAME = '1';
 process.env.PORT = '1';
@@ -51,7 +38,7 @@ process.env.SENTRY_DSN = 'https://test@test.sentry.io/test';
 const configProviders = [
   ConfigService,
   NestConfigService,
-  WorkerClientRmqConfig,
+  createRmqConfig('WORKER'),
   TelegramChatConfig,
   RedisConfig,
   WinstonConfig,

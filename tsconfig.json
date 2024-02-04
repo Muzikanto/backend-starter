@@ -5,7 +5,6 @@
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "lib": ["ESNext"],
@@ -21,6 +20,7 @@
     "strict": true,
     "strictNullChecks": true,
     "strictBindCallApply": false,
+    "experimentalDecorators": true,
     "paths": {
       "@app/*": ["./apps/*"],
       "@core/*": ["./core/*"],

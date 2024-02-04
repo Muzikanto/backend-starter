@@ -19,6 +19,7 @@ export abstract class RepositoryBase<
     this.repo = this.dataSource.getRepository(this.entity);
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   public async get(id: string | number, opts?: any): Promise<Domain | null> {
     // eslint-disable-next-line
     const entity = await this.repo.findOne({ where: { id: String(id) } as any });
@@ -117,6 +118,7 @@ export abstract class RepositoryBase<
     return arr.map((el) => this.toDomain(el));
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   public async total(opts?: any): Promise<number> {
     return this.repo.count();
   }

@@ -7,17 +7,20 @@ import { Gauge } from 'prom-client';
 
 @Injectable()
 export class HttpHealthIndicator extends BaseHealthIndicator implements HealthIndicator {
-  public readonly name = 'Test123';
-  protected readonly help = 'Status of ' + this.name;
+  public name: string;
 
-  constructor(protected readonly url: string, protected readonly gauge: Gauge<string>) {
+  constructor(
+    protected readonly config: { name: string; url: string; help?: string },
+    protected readonly gauge: Gauge<string>
+  ) {
     super();
-    this.url = url || '';
+
+    this.name = config.name;
   }
 
   public async isHealthy(): Promise<HealthIndicatorResult> {
     try {
-      await axios.get(this.url);
+      await axios.get(this.config.url);
 
       // const result: Promise<HealthIndicatorResult> = this.httpHealthIndicator.pingCheck(this.name, this.url);
       // if the api dependency isn't available, HealthCheckService

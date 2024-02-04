@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, VersioningType } from '@nestjs/common';
-import { RmqOptions } from '@nestjs/microservices';
 import { AppConfig } from '@packages/app';
-import { WorkerClientRmqConfig } from '@packages/client-api/worker-client.rmq.config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ResponseInterceptor } from '@packages/nest';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { getHttpConfigToken, HttpOptions } from '@packages/client-api';
 
 const host = '0.0.0.0';
 
@@ -23,11 +23,24 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
+  if (!config.isProduction) {
+    const documentConfig = new DocumentBuilder()
+      .setTitle('Worker service')
+      .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'authorization')
+      .addCookieAuth('authorization', { type: 'http', in: 'Header', scheme: 'Bearer' })
+      .build();
+    const document = SwaggerModule.createDocument(app, documentConfig);
+
+    SwaggerModule.setup('swagger', app, document);
+  }
+
+  const httpOptions: HttpOptions = app.get(getHttpConfigToken('WORKER'));
+
   // const rmqOptions: RmqOptions = app.get(WorkerClientRmqConfig).createClientOptions();
   // app.connectMicroservice(rmqOptions, { inheritAppConfig: false });
 
   // await app.startAllMicroservices();
-  await app.listen(config.port, host);
+  await app.listen(httpOptions.port, host);
 
   logger.debug(`Service is running on: ${await app.getUrl()}`);
   // logger.debug(`Service available on tcp://${host}:${tcpPort}`);

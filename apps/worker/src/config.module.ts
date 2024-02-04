@@ -1,7 +1,6 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, Provider } from '@nestjs/common';
 import * as NestConfig from '@nestjs/config';
 import { ConfigService } from '@packages/config/config.service';
-import { WorkerClientRmqConfig } from '@packages/client-api/worker-client.rmq.config';
 import { AppConfig } from '@packages/app';
 import path from 'path';
 import { TypeormConfig } from '@packages/db/config/typeorm.config';
@@ -11,20 +10,26 @@ import { WinstonConfig } from '@packages/logger';
 import { SentryConfig } from '@packages/sentry';
 import { TelegramConfig } from '@packages/telegram';
 import { PrometheusConfig } from '@packages/metrics';
+import { createRmqConfig } from '@packages/client-api';
 
-const providers = [
+const configs = [
+  // clients
+  createRmqConfig('WORKER'),
+  // data-sources
+  TypeormConfig,
   // internal
   ConfigService,
   AppConfig,
-  WorkerClientRmqConfig,
   WinstonConfig,
   SentryConfig,
   TelegramConfig,
-  TypeormConfig,
   PrometheusConfig,
   HealthConfig,
   // app
 ];
+
+const metricProviders: Provider[] = [makeGaugeProvider({ name: 'http', help: 'Check access to internet' })];
+const metricExports: string[] = [getToken('http')];
 
 @Global()
 @Module({
@@ -33,12 +38,7 @@ const providers = [
       envFilePath: [path.resolve('./apps/worker/.env')],
     }),
   ],
-  providers: [
-    NestConfig.ConfigService,
-    makeGaugeProvider({ name: 'http', help: 'Access to internet' }),
-    makeGaugeProvider({ name: 'worker', help: 'Access to worker' }),
-    ...providers,
-  ],
-  exports: [getToken('http'), getToken('worker'), ...providers],
+  providers: [NestConfig.ConfigService, ...metricProviders, ...configs],
+  exports: [...metricExports, ...configs],
 })
 export class ConfigModule {}

@@ -8,11 +8,8 @@ import { HealthIndicator, HttpHealthIndicator } from '@packages/health';
 export class HealthConfig implements IHealthConfigFactory {
   private readonly listOfThingsToMonitor: HealthIndicator[];
 
-  constructor(
-    @InjectMetric('http') protected http: Gauge<string>,
-    @InjectMetric('worker') protected worker: Gauge<string>
-  ) {
-    this.listOfThingsToMonitor = [new HttpHealthIndicator('https://google.com', http)];
+  constructor(@InjectMetric('http') protected http: Gauge<string>) {
+    this.listOfThingsToMonitor = [new HttpHealthIndicator({ url: 'https://google.com', name: 'http' }, http)];
   }
 
   createHealthConfig(): Promise<IHealthConfig> | IHealthConfig {

@@ -1,4 +1,4 @@
-import { Inject, Logger as NestLogger } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 export const prefixesForLoggers: string[] = new Array<string>();

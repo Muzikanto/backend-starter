@@ -3,14 +3,14 @@ import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class DurationInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
     // console.log('Before...');
 
     const now = Date.now();
 
     return next.handle().pipe(
       tap(() => {
-        // console.log(`After... ${Date.now() - now}ms`);
+        console.log(`Execute time: ${Date.now() - now}ms`);
       })
     );
   }

@@ -4,8 +4,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@app/worker/src/config.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeormConfig } from '@packages/db/config/typeorm.config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { HealthConfig } from '@app/worker/src/health.config';
 import { WinstonModule } from 'nest-winston';
@@ -16,7 +14,6 @@ import { HealthModule } from '@packages/health';
 import { TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { PrometheusConfig } from '@packages/metrics';
-import { KeyValueModule } from '@packages/key-value';
 
 @Module({
   imports: [
@@ -36,11 +33,6 @@ import { KeyValueModule } from '@packages/key-value';
       useExisting: TelegramConfig,
       imports: [ConfigModule],
     }),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useExisting: TypeormConfig,
-    // }),
-    // KeyValueModule,
     PrometheusModule.registerAsync({
       imports: [ConfigModule],
       useExisting: PrometheusConfig,
