@@ -6,8 +6,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { HealthConfig } from '@app/worker/src/health.config';
-import { WinstonModule } from 'nest-winston';
-import { WinstonConfig, LoggerModule } from '@packages/logger';
+import { LoggerConfig, LoggerModule } from '@packages/logger';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { HealthModule } from '@packages/health';
@@ -20,10 +19,9 @@ import { PrometheusConfig } from '@packages/metrics';
     ConfigModule,
     ThrottlerModule.forRoot(),
     ScheduleModule.forRoot(),
-    LoggerModule,
-    WinstonModule.forRootAsync({
+    LoggerModule.register({
       imports: [ConfigModule],
-      useClass: WinstonConfig,
+      useClass: LoggerConfig,
     }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],

@@ -6,21 +6,22 @@ import path from 'path';
 import { TypeormConfig } from '@packages/db/config/typeorm.config';
 import { HealthConfig } from '@app/worker/src/health.config';
 import { getToken, makeGaugeProvider } from '@willsoto/nestjs-prometheus';
-import { WinstonConfig } from '@packages/logger';
+import { LoggerConfig } from '@packages/logger';
 import { SentryConfig } from '@packages/sentry';
 import { TelegramConfig } from '@packages/telegram';
 import { PrometheusConfig } from '@packages/metrics';
-import { createRmqConfig } from '@packages/client-api';
+import { createHttpConfig, createRmqConfig } from '@packages/client-api';
 
 const configs = [
   // clients
   createRmqConfig('WORKER'),
+  createHttpConfig('WORKER'),
   // data-sources
   TypeormConfig,
   // internal
   ConfigService,
   AppConfig,
-  WinstonConfig,
+  LoggerConfig,
   SentryConfig,
   TelegramConfig,
   PrometheusConfig,

@@ -15,7 +15,7 @@ const logLevels = {
 };
 
 @Injectable()
-export class WinstonConfig implements WinstonModuleOptionsFactory {
+export class LoggerConfig implements WinstonModuleOptionsFactory {
   public readonly dist?: string;
   public readonly level: string;
 

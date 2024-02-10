@@ -9,8 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfig } from '@packages/db';
 import { HealthConfig } from '@app/gateway/src/health.config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { WinstonModule } from 'nest-winston';
-import { WinstonConfig, LoggerModule } from '@packages/logger';
+import { LoggerConfig, LoggerModule } from '@packages/logger';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { TelegramConfig } from '@packages/telegram';
@@ -19,6 +18,7 @@ import { PrometheusConfig } from '@packages/metrics';
 import { ExampleApplicationModule } from '@core/example/application-module';
 import { KeycloakConfig } from '@packages/keycloak';
 import { KeycloakConnectModule } from 'nest-keycloak-connect';
+import { UserApplicationModule } from '@core/user/application-module';
 
 @Module({
   imports: [
@@ -29,10 +29,9 @@ import { KeycloakConnectModule } from 'nest-keycloak-connect';
       imports: [ConfigModule],
       useExisting: TypeormConfig,
     }),
-    LoggerModule,
-    WinstonModule.forRootAsync({
+    LoggerModule.register({
       imports: [ConfigModule],
-      useClass: WinstonConfig,
+      useClass: LoggerConfig,
     }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
@@ -56,6 +55,7 @@ import { KeycloakConnectModule } from 'nest-keycloak-connect';
     }),
     // App
     ExampleApplicationModule.forMonolith(),
+    UserApplicationModule.forMonolith(),
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: ExceptionInterceptor }],
 })

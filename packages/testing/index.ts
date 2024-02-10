@@ -12,7 +12,7 @@ import { MockConfigModule } from '@packages/testing/config';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { withMockRedis } from '@packages/redis/testing';
 import { WinstonModule } from 'nest-winston';
-import { WinstonConfig } from '@packages/logger/winston.config';
+import { LoggerConfig } from '@packages/logger/logger.config';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { SentryConfig } from '@packages/sentry';
@@ -42,7 +42,7 @@ export const getTestingApplication = async (metadata: ModuleMetadata): Promise<I
       CqrsModule,
       ThrottlerModule.forRoot(),
       WinstonModule.forRootAsync({
-        useClass: WinstonConfig,
+        useClass: LoggerConfig,
       }),
       SentryModule.forRootAsync({
         useExisting: SentryConfig,

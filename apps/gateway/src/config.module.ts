@@ -6,7 +6,7 @@ import { AppConfig } from '@packages/app';
 import { TypeormConfig } from '@packages/db';
 import { HealthConfig } from '@app/gateway/src/health.config';
 import { getToken, makeGaugeProvider } from '@willsoto/nestjs-prometheus';
-import { WinstonConfig } from '@packages/logger';
+import { LoggerConfig } from '@packages/logger';
 
 import { PrometheusConfig } from '@packages/metrics';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
@@ -29,7 +29,7 @@ const configs: Provider[] = [
   // internal
   ConfigService,
   AppConfig,
-  WinstonConfig,
+  LoggerConfig,
   PrometheusConfig,
   HealthConfig,
   TelegramConfig,

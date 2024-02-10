@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { WinstonConfig } from '@packages/logger/winston.config';
+import { LoggerConfig } from '@packages/logger/logger.config';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { ConfigService } from '@packages/config';
@@ -41,7 +41,7 @@ const configProviders = [
   createRmqConfig('WORKER'),
   TelegramChatConfig,
   RedisConfig,
-  WinstonConfig,
+  LoggerConfig,
   SentryConfig,
   TelegramConfig,
   AppConfig,
