@@ -1,13 +1,9 @@
-import { Controller, Get, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, NotImplementedException, Post, Query, UsePipes } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
-
 import { ValidationPipe } from '@packages/nest';
-import { UserDto } from '../../domain';
-import { IGetUserResponse } from '../queries/types';
 
-const tag = 'User';
+const tag = 'Auth';
 
 @UsePipes(
   new ValidationPipe({
@@ -16,19 +12,19 @@ const tag = 'User';
     forbidNonWhitelisted: true,
   })
 )
-@Controller({ path: '/user', version: '1' })
-export class UserController {
+@Controller({ path: '/auth', version: '1' })
+export class AuthController {
   constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) {}
 
-  @Get('/')
+  @Post('/')
   @ApiOperation({
-    summary: 'Get user',
+    summary: 'Authenticate',
     tags: [tag],
   })
-  @ApiResponse({ type: UserDto })
+  @ApiResponse({ type: String })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@AuthenticatedUser() user: any): Promise<IGetUserResponse> {
-    return user;
+  async get(): Promise<string> {
+    throw new NotImplementedException();
   }
 }

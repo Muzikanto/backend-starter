@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const createModule = require('./module');
+const createCommand = require('./command');
 
 const program = new commander.Command();
 
@@ -14,7 +15,10 @@ program.action(async () => {
     type: 'select',
     name: 'type',
     message: 'Select generation type',
-    choices: [{ title: 'Module', value: 'module' }],
+    choices: [
+      { title: 'Module', value: 'module' },
+      { title: 'Command', value: 'command' },
+    ],
   });
 
   if (!promptType.type) {
@@ -35,6 +39,40 @@ program.action(async () => {
       }
 
       createModule({ featureName: promptName.featureName });
+      break;
+    }
+    case 'command': {
+      const promptName = await prompts({
+        type: 'text',
+        name: 'featureName',
+        message: 'Enter module name',
+        validate: (v) => (!fs.existsSync(path.resolve('core', v)) ? 'feature not found' : true),
+      });
+
+      if (!promptName.featureName) {
+        process.exit();
+      }
+
+      const promptCommand = await prompts({
+        type: 'text',
+        name: 'name',
+        message: 'Enter command name',
+        validate: (v) =>
+          v
+            ? fs.existsSync(path.resolve('core', v, 'application-module', 'commands', 'handlers', `${v}.handler.ts`))
+              ? 'command already exists'
+              : true
+            : 'Name required',
+      });
+
+      if (!promptCommand.name) {
+        process.exit();
+      }
+
+      createCommand({
+        feature: promptName.featureName,
+        command: promptCommand.name.slice(0, 1).toUpperCase() + promptCommand.name.slice(1),
+      });
       break;
     }
     default: {

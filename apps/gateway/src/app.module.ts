@@ -19,6 +19,7 @@ import { ExampleApplicationModule } from '@core/example/application-module';
 import { KeycloakConfig } from '@packages/keycloak';
 import { KeycloakConnectModule } from 'nest-keycloak-connect';
 import { UserApplicationModule } from '@core/user/application-module';
+import { AuthApplicationModule } from '@core/auth/application-module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { UserApplicationModule } from '@core/user/application-module';
     // App
     ExampleApplicationModule.forMonolith(),
     UserApplicationModule.forMonolith(),
+    AuthApplicationModule.forMonolith(),
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: ExceptionInterceptor }],
 })
