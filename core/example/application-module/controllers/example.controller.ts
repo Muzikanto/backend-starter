@@ -5,12 +5,12 @@ import { Example, ExampleMapper, ExampleDto } from '@core/example/domain';
 import { CreateExampleCommand } from '@core/example/application-module/commands/impl';
 import { CreateExampleDto } from '@core/example/application-module/commands/dto/create-example.dto';
 import { GetExampleDto } from '@core/example/application-module/queries/dto/get-example.dto';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { ICreateExampleResponse } from '@core/example/application-module/commands/types/response.types';
 import { IGetExampleResponse } from '@core/example/application-module/queries/types/response.types';
 
 import { GetExampleQuery } from '../queries/impl';
 import { ValidationPipe } from '@packages/nest';
+import { AuthUser, IAuthUser } from '@core/auth/core';
 
 const tag = 'Example';
 
@@ -33,7 +33,7 @@ export class ExampleController {
   @ApiResponse({ type: ExampleDto })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@Query() query: GetExampleDto, @AuthenticatedUser() userAuth: any): Promise<IGetExampleResponse> {
+  async get(@Query() query: GetExampleDto, @AuthUser() authUser: IAuthUser): Promise<IGetExampleResponse> {
     const example = await this.queryBus.execute<GetExampleQuery, Example>(new GetExampleQuery({ id: query.exampleId }));
 
     return ExampleMapper.toResponse(example);
@@ -47,7 +47,7 @@ export class ExampleController {
   @ApiResponse({ type: ExampleDto })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(@Body() body: CreateExampleDto, @AuthenticatedUser() userAuth: any): Promise<ICreateExampleResponse> {
+  async create(@Body() body: CreateExampleDto, @AuthUser() authUser: IAuthUser): Promise<ICreateExampleResponse> {
     const example = await this.commandBus.execute<CreateExampleCommand, Example>(
       new CreateExampleCommand({ value: body.value })
     );

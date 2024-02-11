@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { UserDto } from '../../domain';
 import { GetUserDto } from '../queries/dto/get-user.dto';
 import { IGetUserResponse } from '../queries/types';
 import { ICreateUserResponse } from '../commands/types';
 import { CreateUserDto } from '../commands/dto';
 import { UserClient } from '../../proxy-module';
+import { AuthUser, IAuthUser } from '@core/auth/core';
 
 const tag = 'User';
 
@@ -34,7 +34,7 @@ export class UserProxyController {
   @ApiResponse({ type: UserDto })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@Query() query: GetUserDto, @AuthenticatedUser() userAuth: any): Promise<IGetUserResponse> {
+  async get(@Query() query: GetUserDto, @AuthUser() authUser: IAuthUser): Promise<IGetUserResponse> {
     return this.client.getUser({ ...query });
   }
 
@@ -46,7 +46,7 @@ export class UserProxyController {
   @ApiResponse({ type: UserDto })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(@Body() body: CreateUserDto, @AuthenticatedUser() userAuth: any): Promise<ICreateUserResponse> {
+  async create(@Body() body: CreateUserDto, @AuthUser() authUser: IAuthUser): Promise<ICreateUserResponse> {
     return this.client.createUser({ ...body });
   }
 }

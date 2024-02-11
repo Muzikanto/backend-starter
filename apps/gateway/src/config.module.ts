@@ -12,10 +12,10 @@ import { PrometheusConfig } from '@packages/metrics';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { RedisConfig } from '@packages/redis';
-import { KeycloakConfig } from '@packages/keycloak';
 import { createTcpConfig } from '@packages/client-api/create-tcp-config';
 import { createRmqConfig } from '@packages/client-api/create-rmq-config';
 import { createHttpConfig } from '@packages/client-api';
+import { AuthConfig } from '@core/auth/core';
 
 const configs: Provider[] = [
   // clients
@@ -26,16 +26,18 @@ const configs: Provider[] = [
   // data-sources
   RedisConfig,
   TypeormConfig,
-  // internal
-  ConfigService,
-  AppConfig,
-  LoggerConfig,
+  // metrics
   PrometheusConfig,
   HealthConfig,
+  // logs
+  LoggerConfig,
   TelegramConfig,
   TelegramChatConfig,
   SentryConfig,
-  KeycloakConfig,
+  // internal
+  AuthConfig,
+  ConfigService,
+  AppConfig,
   // app
 ];
 const metricProviders: Provider[] = [

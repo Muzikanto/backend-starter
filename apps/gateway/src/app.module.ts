@@ -16,10 +16,10 @@ import { TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { PrometheusConfig } from '@packages/metrics';
 import { ExampleApplicationModule } from '@core/example/application-module';
-import { KeycloakConfig } from '@packages/keycloak';
-import { KeycloakConnectModule } from 'nest-keycloak-connect';
 import { UserApplicationModule } from '@core/user/application-module';
 import { AuthApplicationModule } from '@core/auth/application-module';
+import { AuthModule } from '@core/auth/core/auth.module';
+import { AuthConfig } from '@core/auth/core';
 
 @Module({
   imports: [
@@ -50,9 +50,9 @@ import { AuthApplicationModule } from '@core/auth/application-module';
       useExisting: HealthConfig,
       imports: [ConfigModule],
     }),
-    KeycloakConnectModule.registerAsync({
+    AuthModule.registerAsync({
       imports: [ConfigModule],
-      useExisting: KeycloakConfig,
+      useExisting: AuthConfig,
     }),
     // App
     ExampleApplicationModule.forMonolith(),

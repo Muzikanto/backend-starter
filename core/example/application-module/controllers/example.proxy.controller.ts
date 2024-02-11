@@ -4,10 +4,10 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ExampleDto } from '@core/example/domain';
 import { CreateExampleDto } from '@core/example/application-module/commands/dto/create-example.dto';
 import { GetExampleDto } from '@core/example/application-module/queries/dto/get-example.dto';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { ICreateExampleResponse } from '@core/example/application-module/commands/types/response.types';
 import { IGetExampleResponse } from '@core/example/application-module/queries/types/response.types';
 import { ExampleClient } from '@core/example/proxy-module';
+import { AuthUser, IAuthUser } from '@core/auth/core';
 
 const tag = 'Example';
 
@@ -33,8 +33,7 @@ export class ExampleProxyController {
   })
   @ApiResponse({ type: ExampleDto })
   @ApiBearerAuth('authorization')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@Query() query: GetExampleDto, @AuthenticatedUser() userAuth: any): Promise<IGetExampleResponse> {
+  async get(@Query() query: GetExampleDto, @AuthUser() authUser: IAuthUser): Promise<IGetExampleResponse> {
     return this.client.getExample({ ...query });
   }
 
@@ -46,7 +45,7 @@ export class ExampleProxyController {
   @ApiResponse({ type: ExampleDto })
   @ApiBearerAuth('authorization')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(@Body() body: CreateExampleDto, @AuthenticatedUser() userAuth: any): Promise<ICreateExampleResponse> {
+  async create(@Body() body: CreateExampleDto, @AuthUser() authUser: IAuthUser): Promise<ICreateExampleResponse> {
     return this.client.createExample({ ...body });
   }
 }

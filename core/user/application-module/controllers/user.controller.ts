@@ -1,11 +1,12 @@
 import { Controller, Get, UsePipes } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
 
 import { ValidationPipe } from '@packages/nest';
 import { UserDto } from '../../domain';
 import { IGetUserResponse } from '../queries/types';
+import { GetUserQuery } from '@core/user/application-module/queries/impl';
+import { AuthUser, IAuthUser } from '@core/auth/core';
 
 const tag = 'User';
 
@@ -27,8 +28,7 @@ export class UserController {
   })
   @ApiResponse({ type: UserDto })
   @ApiBearerAuth('authorization')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@AuthenticatedUser() user: any): Promise<IGetUserResponse> {
-    return user;
+  async get(@AuthUser() authUser: IAuthUser): Promise<IGetUserResponse> {
+    return this.queryBus.execute(new GetUserQuery({ id: authUser.id }));
   }
 }

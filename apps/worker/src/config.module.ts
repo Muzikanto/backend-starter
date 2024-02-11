@@ -18,14 +18,17 @@ const configs = [
   createHttpConfig('WORKER'),
   // data-sources
   TypeormConfig,
-  // internal
-  ConfigService,
-  AppConfig,
+  // metrics
+  PrometheusConfig,
+  HealthConfig,
+  // logs
   LoggerConfig,
   SentryConfig,
   TelegramConfig,
-  PrometheusConfig,
-  HealthConfig,
+  // internal
+  ConfigService,
+  AppConfig,
+
   // app
 ];
 

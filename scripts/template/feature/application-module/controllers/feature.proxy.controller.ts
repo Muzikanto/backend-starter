@@ -1,13 +1,13 @@
-import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import {Body, Controller, Get, Post, Query, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { FeatureDto } from '../../domain';
 import { GetFeatureDto } from '../queries/dto/get-feature.dto';
 import { IGetFeatureResponse } from '../queries/types';
 import { ICreateFeatureResponse } from '../commands/types';
 import { CreateFeatureDto } from '../commands/dto';
 import { FeatureClient } from '../../proxy-module';
+import {AuthGuard, AuthUser, IAuthUser} from "@core/auth/core";
 
 const tag = 'Feature';
 
@@ -27,26 +27,26 @@ export class FeatureProxyController {
   ) {}
 
   @Get('/get')
+  @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Get feature',
     tags: [tag],
   })
   @ApiResponse({ type: FeatureDto })
   @ApiBearerAuth('authorization')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async get(@Query() query: GetFeatureDto, @AuthenticatedUser() userAuth: any): Promise<IGetFeatureResponse> {
+  async get(@Query() query: GetFeatureDto, @AuthUser() authUser: IAuthUser): Promise<IGetFeatureResponse> {
     return this.client.getFeature({ ...query });
   }
 
   @Post('/create')
+  @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Create feature',
     tags: [tag],
   })
   @ApiResponse({ type: FeatureDto })
   @ApiBearerAuth('authorization')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(@Body() body: CreateFeatureDto, @AuthenticatedUser() userAuth: any): Promise<ICreateFeatureResponse> {
+  async create(@Body() body: CreateFeatureDto, @AuthUser() authUser: IAuthUser): Promise<ICreateFeatureResponse> {
     return this.client.createFeature({ ...body });
   }
 }

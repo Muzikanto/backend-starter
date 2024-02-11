@@ -39,13 +39,15 @@ export class ExceptionInterceptor implements NestInterceptor {
           return new HttpException(
             {
               statusCode: err.response?.statusCode || err.status || 500,
-              errorCode: err.response?.errorCode,
-              message: err.response?.message || err.message || 'Something went wrong',
-              stack: err.response?.error || err.stack,
-              query: request.query,
-              body: request.body,
-              params: request.params,
-              path: request.routerPath,
+              error: {
+                code: err.response?.errorCode,
+                message: err.response?.message || err.message || 'Something went wrong',
+                // stack: err.response?.error || err.stack,
+                // query: request.query,
+                // body: request.body,
+                // params: request.params,
+                // path: request.routerPath,
+              },
             },
             err.response?.statusCode || 500
           );
