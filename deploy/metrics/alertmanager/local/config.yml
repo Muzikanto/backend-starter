@@ -1,10 +1,13 @@
 route:
     receiver: telegram
+    group_by: [ 'alertname' ]
+    group_wait: 3s
+    group_interval: 5s
+    repeat_interval: 10m
 
 receivers:
   - name: 'telegram'
     telegram_configs:
       - api_url: https://api.telegram.org
-        bot_token: 6627460328:AAE3SA9vexCPQk5P7A0pzhhn77f-U_MKdTU
+        bot_token: 6949643177:AAFI1J_FcxJZ46CTNAXkyCaQ9DNJHzOQK9g
         chat_id: 674525070
-        parse_mode: ''

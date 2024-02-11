@@ -8,7 +8,7 @@ INFRASTRUCTURE_NAME=backend
 
 init:
 	cp ./apps/gateway/.env.sample ./apps/gateway/.env && \
-	cp ./apps/worker/.env.sample ./apps/worker/.env \
+	cp ./apps/worker/.env.sample ./apps/worker/.env && \
 	cp ./apps/elastic/.env.infrastructure.sample ./apps/elastic/.env.infrastructure && \
 	cp ./apps/keycloak/.env.infrastructure.sample ./apps/keycloak/.env.infrastructure && \
 	cp ./apps/loki/.env.infrastructure.sample ./apps/loki/.env.infrastructure && \
@@ -42,6 +42,9 @@ upMinio:
 upKeycloak:
 	docker-compose -f ./deploy/keycloak/docker-compose.keycloak.yml -p ${INFRASTRUCTURE_NAME} up -d
 
+upMetrics:
+	docker-compose -f ./deploy/metrics/docker-compose.metrics.yml -p ${INFRASTRUCTURE_NAME} up -d
+
 # infrastructure down
 
 downPostgres:
@@ -61,6 +64,9 @@ downMinio:
 
 downKeycloak:
 	docker-compose -f ./deploy/keycloak/docker-compose.keycloak.yml -p ${INFRASTRUCTURE_NAME} down
+
+downMetrics:
+	docker-compose -f ./deploy/metrics/docker-compose.metrics.yml -p ${INFRASTRUCTURE_NAME} down
 
 # docker
 

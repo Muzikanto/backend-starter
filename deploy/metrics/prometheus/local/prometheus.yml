@@ -6,16 +6,15 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-    monitor: 'Twilight Mobile'
+    monitor: 'Backend'
 
 rule_files:
-  - demo-alerts.yml
+  - alerts.yml
 
- alert
+# alert
 alerting:
   alertmanagers:
-  - scheme: http
-    static_configs:
+  - static_configs:
     - targets:
       - "docker.for.mac.localhost:9093"
 
@@ -24,7 +23,7 @@ scrape_configs:
   - job_name: "gateway-metrics"
     metrics_path: /api/metrics
     static_configs:
-      - targets: ["docker.for.mac.localhost:4005"]
+      - targets: ["docker.for.mac.localhost:4000"]
 
   - job_name: "prometheus"
     static_configs:

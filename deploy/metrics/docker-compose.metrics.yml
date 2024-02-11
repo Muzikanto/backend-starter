@@ -6,7 +6,7 @@ services:
     container_name: prometheus
     hostname: prometheus
     volumes:
-      - ./prometheus/local/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/local:/etc/prometheus
       - prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -46,7 +46,7 @@ services:
     ports:
       - "9100:3000"
     links:
-      - elasticsearch
+      - prometheus
     networks:
       - http
 
