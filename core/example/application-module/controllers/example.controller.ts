@@ -25,6 +25,17 @@ const tag = 'Example';
 export class ExampleController {
   constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) {}
 
+  @Get('/test')
+  @ApiOperation({
+    summary: 'Get example',
+    tags: [tag],
+  })
+  @ApiResponse({ type: String })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async test(): Promise<string> {
+    return 'test';
+  }
+
   @Get('/get')
   @ApiOperation({
     summary: 'Get example',

@@ -1,1 +1,1 @@
-export * from './prometheus.config';
+export * from './config/prometheus.config';

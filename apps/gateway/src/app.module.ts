@@ -20,6 +20,7 @@ import { UserApplicationModule } from '@core/user/application-module';
 import { AuthApplicationModule } from '@core/auth/application-module';
 import { AuthModule } from '@core/auth/core/auth.module';
 import { AuthConfig } from '@core/auth/core';
+import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemetry';
 
 @Module({
   imports: [
@@ -50,6 +51,10 @@ import { AuthConfig } from '@core/auth/core';
       useExisting: HealthConfig,
       imports: [ConfigModule],
     }),
+    // OpenTelemetryModule.forRootAsync({
+    //   useExisting: OpenTelemetryConfig,
+    //   imports: [ConfigModule],
+    // }),
     AuthModule.registerAsync({
       imports: [ConfigModule],
       useExisting: AuthConfig,

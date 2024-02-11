@@ -16,6 +16,7 @@ import { createTcpConfig } from '@packages/client-api/create-tcp-config';
 import { createRmqConfig } from '@packages/client-api/create-rmq-config';
 import { createHttpConfig } from '@packages/client-api';
 import { AuthConfig } from '@core/auth/core';
+import { OpenTelemetryConfig } from '@packages/open-telemetry';
 
 const configs: Provider[] = [
   // clients
@@ -29,6 +30,7 @@ const configs: Provider[] = [
   // metrics
   PrometheusConfig,
   HealthConfig,
+  OpenTelemetryConfig,
   // logs
   LoggerConfig,
   TelegramConfig,
