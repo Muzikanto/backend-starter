@@ -45,12 +45,7 @@ export class ConfigService {
       return truly;
     }
 
-    const falsy = value === 'false';
-    if (falsy) {
-      return truly;
-    }
-
-    throw new InternalServerErrorException(`${name} parameter does not specified correct boolean format`);
+    return false;
   }
 
   public getDate(name: string): Date {

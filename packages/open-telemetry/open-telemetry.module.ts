@@ -30,6 +30,7 @@ export class OpenTelemetryModule implements OnModuleInit {
     }
 
     const otlSdk = new NodeSDK(otlFactory.createOpenTelemetryConfig());
+
     otlSdk.start();
 
     const service: Provider = {

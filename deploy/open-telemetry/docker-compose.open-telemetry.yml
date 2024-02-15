@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:${JAEGER_IMAGE_TAG:-latest}
+    volumes:
+      - "./jaeger/config.json:/etc/jaeger/jaeger-ui.json"
+    command: --query.ui-config /etc/jaeger/jaeger-ui.json
+    environment:
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://localhost:9090
+      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=${PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR:-true}
+      - PROMETHEUS_QUERY_NAMESPACE=${PROMETHEUS_QUERY_NAMESPACE:-}
+      - PROMETHEUS_QUERY_DURATION_UNIT=${PROMETHEUS_QUERY_DURATION_UNIT:-}
+      - PROMETHEUS_QUERY_NORMALIZE_CALLS=true
+      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+    networks:
+      - http
+
+#  otel_collector:
+#    container_name: otel_collector
+#    image: otel/opentelemetry-collector-contrib:${OTEL_IMAGE_TAG:-0.89.0}
+#    volumes:
+#      - ${OTEL_CONFIG_SRC:-./otl-collector/config.yml}:/etc/otelcol/otel-collector-config.yml
+#    command: --config /etc/otelcol/otel-collector-config.yml
+#    depends_on:
+#      - jaeger
+#    networks:
+#      - http
+#
+#  microsim:
+#    container_name: otel_collector_microsim
+#    image: yurishkuro/microsim:0.2.0
+#    command: "-j http://otel_collector:14278/api/traces -d 24h -s 500ms"
+#    depends_on:
+#      - otel_collector
+#    networks:
+#      - http
+
+networks:
+  http:
+    driver: bridge

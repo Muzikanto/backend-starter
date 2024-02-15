@@ -39,10 +39,10 @@ import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemet
       imports: [ConfigModule],
       useExisting: SentryConfig,
     }),
-    TelegrafModule.forRootAsync({
-      useExisting: TelegramConfig,
-      imports: [ConfigModule],
-    }),
+    // TelegrafModule.forRootAsync({
+    //   useExisting: TelegramConfig,
+    //   imports: [ConfigModule],
+    // }),
     PrometheusModule.registerAsync({
       imports: [ConfigModule],
       useExisting: PrometheusConfig,
@@ -51,10 +51,10 @@ import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemet
       useExisting: HealthConfig,
       imports: [ConfigModule],
     }),
-    // OpenTelemetryModule.forRootAsync({
-    //   useExisting: OpenTelemetryConfig,
-    //   imports: [ConfigModule],
-    // }),
+    OpenTelemetryModule.forRootAsync({
+      useExisting: OpenTelemetryConfig,
+      imports: [ConfigModule],
+    }),
     AuthModule.registerAsync({
       imports: [ConfigModule],
       useExisting: AuthConfig,

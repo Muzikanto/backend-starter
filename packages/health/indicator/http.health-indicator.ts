@@ -2,7 +2,7 @@ import { HealthIndicatorResult } from '@nestjs/terminus';
 import { HealthIndicator } from './health-indicator.types';
 import { BaseHealthIndicator } from './health-indicator';
 import axios from 'axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Gauge } from 'prom-client';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class HttpHealthIndicator extends BaseHealthIndicator implements HealthIn
       return { [this.name]: { status: 'up' } };
     } catch (e) {
       this.gauge.set(0);
-      throw e;
+      throw new InternalServerErrorException({ message: (e as Error).message });
     }
   }
 }

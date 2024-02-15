@@ -45,6 +45,9 @@ upKeycloak:
 upMetrics:
 	docker-compose -f ./deploy/metrics/docker-compose.metrics.yml -p ${INFRASTRUCTURE_NAME} up -d
 
+upOtl:
+	docker-compose -f ./deploy/open-telemetry/docker-compose.open-telemetry.yml -p ${INFRASTRUCTURE_NAME} up -d
+
 # infrastructure down
 
 downPostgres:
@@ -67,6 +70,9 @@ downKeycloak:
 
 downMetrics:
 	docker-compose -f ./deploy/metrics/docker-compose.metrics.yml -p ${INFRASTRUCTURE_NAME} down
+
+downOtl:
+	docker-compose -f ./deploy/open-telemetry/docker-compose.open-telemetry.yml -p ${INFRASTRUCTURE_NAME} down
 
 # docker
 

@@ -20,7 +20,6 @@ export class HealthService {
         try {
           return await apiIndicator.isHealthy();
         } catch (e) {
-          Logger.warn(e);
           return apiIndicator.reportUnhealthy();
         }
       })

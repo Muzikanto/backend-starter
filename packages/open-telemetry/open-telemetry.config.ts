@@ -8,18 +8,23 @@ import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { ConfigService } from '@packages/config';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 
 @Injectable()
 export class OpenTelemetryConfig implements IOpenTelemetryFactory {
   protected readonly serviceName!: string;
+  protected readonly url!: string;
 
   constructor(protected readonly configService: ConfigService) {
     this.serviceName = configService.getString('OTEL_NAME');
+    this.url = configService.getString('OTEL_EXPORTER_URL');
   }
 
   createOpenTelemetryConfig(): IOpenTelemetryOptions {
-    const consoleExporter = new ConsoleSpanExporter();
-    const spanProcessor = new SimpleSpanProcessor(consoleExporter);
+    const traceExporter = new OTLPTraceExporter({
+      url: this.url,
+    });
+    const spanProcessor = new SimpleSpanProcessor(traceExporter);
 
     return {
       serviceName: this.serviceName,

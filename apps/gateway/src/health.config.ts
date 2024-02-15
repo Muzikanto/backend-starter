@@ -14,8 +14,8 @@ export class HealthConfig implements IHealthConfigFactory {
     @Inject(getHttpConfigToken('WORKER')) protected readonly workerHttpConfig: HttpOptions
   ) {
     this.listOfThingsToMonitor = [
-      new HttpHealthIndicator({ url: 'https://google.com', name: 'http' }, httpGauge),
-      new HttpHealthIndicator({ url: this.workerHttpConfig.url, name: 'worker' }, workerGauge),
+      new HttpHealthIndicator({ url: 'https://ya.ru', name: 'http' }, httpGauge),
+      new HttpHealthIndicator({ url: `${this.workerHttpConfig.url}/api/ping`, name: 'worker' }, workerGauge),
     ];
   }
 
