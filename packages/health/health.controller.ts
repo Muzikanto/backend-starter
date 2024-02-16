@@ -18,10 +18,4 @@ export class HealthController {
   async check(): Promise<HealthCheckResult | undefined> {
     return await this.healthService.check();
   }
-
-  @Get('/ping')
-  @ApiOperation({})
-  async ping(): Promise<string> {
-    return 'ok';
-  }
 }

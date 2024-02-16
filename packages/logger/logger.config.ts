@@ -4,6 +4,14 @@ import { ConfigService } from '@packages/config/config.service';
 import path from 'path';
 import { transports as wTransports } from 'winston';
 import { ConsoleTransport } from './module/transport/console.transport';
+import LokiTransport from 'winston-loki';
+
+// const l = createLogger({
+//   transports: new LokiTransport({
+//     host: 'http://127.0.0.1:3100'
+//   })
+// });
+// l.debug({ message: 'test', labels: { 'key': 'value' } });
 
 const logLevels = {
   fatal: 0,
@@ -18,15 +26,18 @@ const logLevels = {
 export class LoggerConfig implements WinstonModuleOptionsFactory {
   public readonly dist?: string;
   public readonly level: string;
+  public readonly lokiUrl?: string;
 
   constructor(configService: ConfigService) {
     const dist = configService.getRaw('LOGGER_DIST');
 
     this.dist = dist ? path.resolve(dist) : undefined;
     this.level = configService.getString('LOGGER_LEVEL');
+    this.lokiUrl = configService.getRaw('LOGGER_LOKI_URL');
   }
 
   createWinstonModuleOptions(): WinstonModuleOptions {
+    //
     const transports: any[] = [new ConsoleTransport()];
     const exceptionHandlers: any[] = [];
     const rejectionHandlers: any[] = [];
@@ -47,6 +58,14 @@ export class LoggerConfig implements WinstonModuleOptionsFactory {
       transports.push(fileTransport);
       exceptionHandlers.push(exceptionsTransport);
       rejectionHandlers.push(rejectionTransport);
+    }
+
+    if (this.lokiUrl) {
+      const lokiTransport = new LokiTransport({
+        host: this.lokiUrl,
+      });
+
+      transports.push(lokiTransport);
     }
 
     return {

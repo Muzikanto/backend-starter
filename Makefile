@@ -27,6 +27,9 @@ watch:
 upPostgres:
 	docker-compose -f ./deploy/postgres/docker-compose.postgres.yml -p ${INFRASTRUCTURE_NAME} up -d postgres
 
+upLogger:
+	docker-compose -f ./deploy/loki/docker-compose.loki.yml -p ${INFRASTRUCTURE_NAME} up -d
+
 upRabbit:
 	docker-compose -f ./deploy/rabbitmq/docker-compose.rabbitmq.yml -p ${INFRASTRUCTURE_NAME} up -d
 
@@ -52,6 +55,9 @@ upOtl:
 
 downPostgres:
 	docker-compose -f ./deploy/postgres/docker-compose.postgres.yml -p ${INFRASTRUCTURE_NAME} down -d postgres
+
+downLogger:
+	docker-compose -f ./deploy/loki/docker-compose.loki.yml -p ${INFRASTRUCTURE_NAME} down
 
 downRabbit:
 	docker-compose -f ./deploy/rabbitmq/docker-compose.rabbitmq.yml -p ${INFRASTRUCTURE_NAME} down

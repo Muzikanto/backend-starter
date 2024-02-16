@@ -21,6 +21,7 @@ import { AuthApplicationModule } from '@core/auth/application-module';
 import { AuthModule } from '@core/auth/core/auth.module';
 import { AuthConfig } from '@core/auth/core';
 import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemetry';
+import { PingModule } from '@packages/ping';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemet
       imports: [ConfigModule],
       useExisting: AuthConfig,
     }),
+    PingModule,
     // App
     ExampleApplicationModule.forMonolith(),
     UserApplicationModule.forMonolith(),
