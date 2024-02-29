@@ -20,6 +20,8 @@ import { AuthModule } from '@core/auth/core/auth.module';
 import { AuthConfig } from '@core/auth/core';
 import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemetry';
 import { PingModule } from '@packages/ping';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ClientStaticConfig } from '@packages/client-static';
 
 @Module({
   imports: [
@@ -59,6 +61,10 @@ import { PingModule } from '@packages/ping';
       useExisting: AuthConfig,
     }),
     PingModule,
+    ServeStaticModule.forRootAsync({
+      imports: [ConfigModule],
+      useExisting: ClientStaticConfig,
+    }),
     // App
     ExampleApplicationModule.forMonolith(),
     UserApplicationModule.forMonolith(),

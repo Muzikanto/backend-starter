@@ -1,6 +1,12 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules",
+  "exclude":
+  [
+    "node_modules",
     "test",
-    "dist", "**/*spec.ts"]
+    "dist",
+    "**/*spec.ts",
+    "client",
+    "scripts"
+  ]
 }

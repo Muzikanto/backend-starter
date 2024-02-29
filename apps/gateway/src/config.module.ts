@@ -17,6 +17,7 @@ import { createRmqConfig } from '@packages/client-api/create-rmq-config';
 import { createHttpConfig } from '@packages/client-api';
 import { AuthConfig } from '@core/auth/core';
 import { OpenTelemetryConfig } from '@packages/open-telemetry';
+import { ClientStaticConfig } from '@packages/client-static';
 
 const configs: Provider[] = [
   // clients
@@ -40,6 +41,8 @@ const configs: Provider[] = [
   AuthConfig,
   ConfigService,
   AppConfig,
+  // client
+  ClientStaticConfig,
   // app
 ];
 const metricProviders: Provider[] = [

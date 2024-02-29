@@ -26,5 +26,15 @@
       "@core/*": ["./core/*"],
       "@packages/*": ["./packages/*"]
     }
-  }
+  },
+  "include": [
+    "apps",
+    "core",
+    "packages"
+  ],
+  "exclude": [
+    "node_modules",
+    "client",
+    "scripts"
+  ]
 }
