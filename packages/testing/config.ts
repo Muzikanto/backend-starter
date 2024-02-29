@@ -4,7 +4,7 @@ import { LoggerConfig } from '@packages/logger/logger.config';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { ConfigService } from '@packages/config';
-import { RedisConfig } from '@packages/redis';
+import { RedisConfig } from '@packages/cache';
 import { AppConfig } from '@packages/app';
 import { createRmqConfig } from '@packages/client-api';
 import { mockRmqConfig, mockTcpConfig } from '@packages/client-api/testing';

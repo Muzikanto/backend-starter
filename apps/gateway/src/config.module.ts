@@ -11,7 +11,7 @@ import { LoggerConfig } from '@packages/logger';
 import { PrometheusConfig } from '@packages/metrics';
 import { TelegramChatConfig, TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
-import { RedisConfig } from '@packages/redis';
+import { RedisConfig } from '@packages/cache';
 import { createTcpConfig } from '@packages/client-api/create-tcp-config';
 import { createRmqConfig } from '@packages/client-api/create-rmq-config';
 import { createHttpConfig } from '@packages/client-api';

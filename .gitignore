@@ -4,7 +4,7 @@ dist
 node_modules
 out
 build
-cache
+# cache
 artifacts
 deployments
 abi.json

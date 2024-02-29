@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import Redis from 'ioredis';
 
 // eslint-disable-next-line
-export abstract class RepositoryRedisBase<Domain extends DomainBase<any>, Entity extends { id: string }> {
+export abstract class CacheBase<Domain extends DomainBase<any>, Entity extends { id: string }> {
   protected constructor(
     protected readonly prefix: string,
     protected mapper: IMapper<any, any>,

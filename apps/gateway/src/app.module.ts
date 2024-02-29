@@ -11,8 +11,6 @@ import { HealthConfig } from '@app/gateway/src/health.config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerConfig, LoggerModule } from '@packages/logger';
 import { SentryModule } from '@ntegral/nestjs-sentry';
-import { TelegrafModule } from 'nestjs-telegraf';
-import { TelegramConfig } from '@packages/telegram';
 import { SentryConfig } from '@packages/sentry';
 import { PrometheusConfig } from '@packages/metrics';
 import { ExampleApplicationModule } from '@core/example/application-module';
