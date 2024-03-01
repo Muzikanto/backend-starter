@@ -39,6 +39,7 @@
     "@elastic/elasticsearch": "^8.10.0",
     "@fastify/static": "^6.6.0",
     "@liaoliaots/nestjs-redis": "^9.0.5",
+    "@nestjs-modules/mailer": "^1.11.2",
     "@nestjs/common": "9.2.1",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "9.2.1",

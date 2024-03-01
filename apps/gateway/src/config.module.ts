@@ -18,6 +18,7 @@ import { createHttpConfig } from '@packages/client-api';
 import { AuthConfig } from '@core/auth/core';
 import { OpenTelemetryConfig } from '@packages/open-telemetry';
 import { ClientStaticConfig } from '@packages/client-static';
+import { SmtpConfig } from '@packages/smtp';
 
 const configs: Provider[] = [
   // clients
@@ -37,6 +38,8 @@ const configs: Provider[] = [
   TelegramConfig,
   TelegramChatConfig,
   SentryConfig,
+  // mail
+  SmtpConfig,
   // internal
   AuthConfig,
   ConfigService,

@@ -17,7 +17,11 @@ export class ConsoleTransport extends Transport {
     if (info.level === 'info') {
       this.consoleLogger.log(info.message, info.context);
     } else if (info.level === 'error') {
-      this.consoleLogger.error(info.message, info.stack?.join(''), info.context);
+      if (info.stack) {
+        this.consoleLogger.error(info.message, info.stack?.join('\n'), info.context || 'Logger');
+      } else {
+        this.consoleLogger.error(info.message, '', info.context || 'Logger');
+      }
     } else {
       this.consoleLogger[info.level](info.message, info.context);
     }

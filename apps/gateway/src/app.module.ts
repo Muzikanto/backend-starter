@@ -22,6 +22,8 @@ import { OpenTelemetryConfig, OpenTelemetryModule } from '@packages/open-telemet
 import { PingModule } from '@packages/ping';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ClientStaticConfig } from '@packages/client-static';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { SmtpConfig } from '@packages/smtp';
 
 @Module({
   imports: [
@@ -64,6 +66,10 @@ import { ClientStaticConfig } from '@packages/client-static';
     ServeStaticModule.forRootAsync({
       imports: [ConfigModule],
       useExisting: ClientStaticConfig,
+    }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useExisting: SmtpConfig,
     }),
     // App
     ExampleApplicationModule.forMonolith(),
