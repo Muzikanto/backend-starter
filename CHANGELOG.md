@@ -1,5 +1,12 @@
 # @muzikanto/backend-starter
 
+## 0.3.3
+
+### Patch Changes
+
+- upload module
+- f367131: add fastify multipart
+
 ## 0.3.2
 
 ### Patch Changes

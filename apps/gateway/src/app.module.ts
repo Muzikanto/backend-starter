@@ -24,6 +24,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ClientStaticConfig } from '@packages/client-static';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { SmtpConfig } from '@packages/smtp';
+import { UploadConfig, UploadModule } from '@packages/upload';
 
 @Module({
   imports: [
@@ -71,6 +72,11 @@ import { SmtpConfig } from '@packages/smtp';
     //   imports: [ConfigModule],
     //   useExisting: SmtpConfig,
     // }),
+
+    UploadModule.registerAsync({
+      imports: [ConfigModule],
+      useExisting: UploadConfig,
+    }),
     // App
     ExampleApplicationModule.forMonolith(),
     UserApplicationModule.forMonolith(),

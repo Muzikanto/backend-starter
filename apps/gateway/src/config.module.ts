@@ -19,6 +19,7 @@ import { AuthConfig } from '@core/auth/core';
 import { OpenTelemetryConfig } from '@packages/open-telemetry';
 import { ClientStaticConfig } from '@packages/client-static';
 import { SmtpConfig } from '@packages/smtp';
+import { UploadConfig } from '@packages/upload';
 
 const configs: Provider[] = [
   // clients
@@ -40,6 +41,8 @@ const configs: Provider[] = [
   SentryConfig,
   // mail
   SmtpConfig,
+  // files
+  UploadConfig,
   // internal
   AuthConfig,
   ConfigService,
