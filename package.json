@@ -1,6 +1,6 @@
 {
   "name": "@muzikanto/backend-starter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "author": "",
   "private": true,
@@ -31,8 +31,9 @@
     "migration:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register apps/gateway/src/migration.ts",
     "migration:revert": "ts-node -r tsconfig-paths/register apps/gateway/src/migration.ts revert",
     "migration:create": "ts-node packages/db/migration/migration-create.ts",
-    "changeset": "changeset",
-    "commit": "cz",
+    "ch": "yarn changeset",
+    "vers": "yarn ch version",
+    "cz": "cz",
     "gen": "node ./scripts/generate/index.js"
   },
   "dependencies": {

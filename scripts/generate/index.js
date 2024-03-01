@@ -5,6 +5,7 @@ const path = require('path');
 
 const createModule = require('./module');
 const createCommand = require('./command');
+const createQuery = require('./query');
 
 const program = new commander.Command();
 
@@ -18,6 +19,7 @@ program.action(async () => {
     choices: [
       { title: 'Module', value: 'module' },
       { title: 'Command', value: 'command' },
+      { title: 'Query', value: 'query' },
     ],
   });
 
@@ -70,6 +72,40 @@ program.action(async () => {
       }
 
       createCommand({
+        feature: promptName.featureName,
+        command: promptCommand.name.slice(0, 1).toUpperCase() + promptCommand.name.slice(1),
+      });
+      break;
+    }
+    case 'query': {
+      const promptName = await prompts({
+        type: 'text',
+        name: 'featureName',
+        message: 'Enter module name',
+        validate: (v) => (!fs.existsSync(path.resolve('core', v)) ? 'feature not found' : true),
+      });
+
+      if (!promptName.featureName) {
+        process.exit();
+      }
+
+      const promptCommand = await prompts({
+        type: 'text',
+        name: 'name',
+        message: 'Enter query name',
+        validate: (v) =>
+          v
+            ? fs.existsSync(path.resolve('core', v, 'application-module', 'queries', 'handlers', `${v}.handler.ts`))
+              ? 'query already exists'
+              : true
+            : 'Name required',
+      });
+
+      if (!promptCommand.name) {
+        process.exit();
+      }
+
+      createQuery({
         feature: promptName.featureName,
         command: promptCommand.name.slice(0, 1).toUpperCase() + promptCommand.name.slice(1),
       });

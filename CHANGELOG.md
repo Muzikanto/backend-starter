@@ -1,5 +1,16 @@
 # @muzikanto/backend-starter
 
+## 0.3.0
+
+### Minor Changes
+
+- add lead module
+
+### Patch Changes
+
+- 1468d34: update cache package
+- b9e4c80: add nodemailer
+
 ## 0.2.0
 
 ### Minor Changes

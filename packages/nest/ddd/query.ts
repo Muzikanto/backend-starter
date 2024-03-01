@@ -16,3 +16,8 @@ export class PaginatedQueryDto implements IPaginatedQuery {
   @Min(0)
   offset?: number;
 }
+
+export type IPaginatedResult<T> = {
+  rows: T[];
+  count: number;
+};

@@ -1,4 +1,4 @@
-import { DomainBase, IMapper } from '../../nest/ddd';
+import { DomainBase, IMapper, IPaginatedResult } from '../../nest/ddd';
 import { DataSource, EntityManager, EntityTarget, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm';
 import { EventPublisher } from '@nestjs/cqrs';
 import { NotFoundException } from '@nestjs/common';
@@ -116,6 +116,17 @@ export abstract class RepositoryBase<
       .getMany();
 
     return arr.map((el) => this.toDomain(el));
+  }
+
+  public async findAndCount(opts: { limit: number; offset?: number }): Promise<IPaginatedResult<Domain>> {
+    const qb = this.repo.createQueryBuilder('row');
+
+    const [arr, count] = await qb
+      .take(opts.limit)
+      .skip(opts.offset || 0)
+      .getManyAndCount();
+
+    return { rows: arr.map((el) => this.toDomain(el)), count };
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars

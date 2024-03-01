@@ -67,10 +67,10 @@ import { SmtpConfig } from '@packages/smtp';
       imports: [ConfigModule],
       useExisting: ClientStaticConfig,
     }),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      useExisting: SmtpConfig,
-    }),
+    // MailerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   useExisting: SmtpConfig,
+    // }),
     // App
     ExampleApplicationModule.forMonolith(),
     UserApplicationModule.forMonolith(),
