@@ -6,13 +6,14 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ResponseInterceptor } from '@packages/nest';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { getHttpConfigToken, HttpOptions } from '@packages/client-api';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
-const host = '0.0.0.0';
+const logger = new Logger('Bootstrap');
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
+  const fastifyAdapter = new FastifyAdapter();
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter);
   app.useLogger(await app.resolve(WINSTON_MODULE_NEST_PROVIDER));
   app.useGlobalInterceptors(new ResponseInterceptor());
 
@@ -22,6 +23,10 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
+  if (config.cors) {
+    fastifyAdapter.enableCors(config.cors);
+  }
 
   if (!config.isProduction) {
     const documentConfig = new DocumentBuilder()
@@ -40,7 +45,7 @@ async function bootstrap() {
   // app.connectMicroservice(rmqOptions, { inheritAppConfig: false });
 
   // await app.startAllMicroservices();
-  await app.listen(httpOptions.port, host);
+  await app.listen(httpOptions.port, '0.0.0.0');
 
   logger.debug(`Service is running on: ${await app.getUrl()}`);
   // logger.debug(`Service available on tcp://${host}:${tcpPort}`);

@@ -26,6 +26,10 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
+  if (config.cors) {
+    fastifyAdapter.enableCors(config.cors);
+  }
+
   if (!config.isProduction) {
     const documentConfig = new DocumentBuilder()
       .setTitle('Gateway service')
