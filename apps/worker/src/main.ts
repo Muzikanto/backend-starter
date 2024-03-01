@@ -30,7 +30,7 @@ async function bootstrap() {
 
   if (!config.isProduction) {
     const documentConfig = new DocumentBuilder()
-      .setTitle('Worker service')
+      .setTitle(`${config.name} service`)
       .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'authorization')
       .addCookieAuth('authorization', { type: 'http', in: 'Header', scheme: 'Bearer' })
       .build();

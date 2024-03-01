@@ -4,7 +4,7 @@ import { ConsoleLogger, VersioningType } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { TcpOptions } from '@nestjs/microservices';
-import { ResponseInterceptor } from '@packages/nest';
+import { fastifyExtend, ResponseInterceptor } from '@packages/nest';
 import { AppConfig } from '@packages/app';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { getTcpConfigToken } from '@packages/client-api/create-tcp-config';
@@ -30,9 +30,11 @@ async function bootstrap() {
     fastifyAdapter.enableCors(config.cors);
   }
 
+  fastifyExtend(app);
+
   if (!config.isProduction) {
     const documentConfig = new DocumentBuilder()
-      .setTitle('Gateway service')
+      .setTitle(`${config.name} service`)
       .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'authorization')
       .addCookieAuth('authorization', { type: 'http', in: 'Header', scheme: 'Bearer' })
       .build();
