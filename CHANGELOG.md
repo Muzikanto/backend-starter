@@ -1,5 +1,11 @@
 # @muzikanto/backend-starter
 
+## 0.3.1
+
+### Patch Changes
+
+- add ws
+
 ## 0.3.0
 
 ### Minor Changes
